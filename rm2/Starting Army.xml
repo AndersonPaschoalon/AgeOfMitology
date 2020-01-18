@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
-<mapinfo details="23969" imagepath="ui\ui map megalopolis 256x256" displayNameID="Starting Army" cannotReplace="" /> 
+<mapinfo detailsText="Starting Army: Each player starts with a huge army." imagepath="ui\ui map megalopolis 256x256" displayName="Starting Army" cannotReplace="" /> 

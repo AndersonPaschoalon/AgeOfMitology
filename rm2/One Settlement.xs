@@ -1,176 +1,78 @@
-/*
- This is a modification of "Sudden Death Map". The Differences are:
-  - There is no "sudden death": no counter is set when you or your enemy
-    looses a town center
-  - On Sudden Death map, each tower has an tent associated. Here, each
-    tower gives 4 houses, another tower, 2 farms and a longhouse (if you
-    are a nord you will give a good use to this bennefit :P)
-  - there is no river or lake between the teams, just forests and grass.
-  - the forests are bigger 
-  - ther is no palm trees, just pine and oak.
-  - Citadel Center" was replaced to a normal "Settlement Level 1"
-*/
+/**
+ * @file Unique Settlement.xs
+ * @author  Anderson Paschoalon <anderson.paschoalon@gmail.com>
+ * @version 1.0
+ * @date 16/01/2020
+ *
+ * @section LICENSE
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details at
+ * https://www.gnu.org/copyleft/gpl.html
+ *
+ * @section DESCRIPTION
+ * This is a modification of "Sudden Death Map". The Differences are:
+ *  - There is no "sudden death": no counter is set when you or your enemy
+ *    looses a town center
+ *  - On the Sudden Death map, each tower has a tent associated. Here, 
+ *    each tower gives 4 houses, another tower, 2 farms and a longhouse 
+ *    (if you are a Nord you will give a good use to this benefit :P)
+ *  - There is no river or lake between the teams, just forests and grass.
+ *  - the forests are bigger 
+ *  - ther is no palm trees, just pine and oak.
+ *  - Citadel Center" was replaced by a "Settlement Level 1"
+ */
 
-// Main entry point for random map script
 void main(void)
 {
 
-// rmSetVCFile("rmsuddendeathvc");
+   for(i=1; <cNumberPlayers)
+   {
+      rmCreateTrigger("StartCountdown" + i);
+      rmCreateTrigger("CountdownWarning"+i);
+      rmCreateTrigger("StopCountdown" +i);
+      rmCreateTrigger("Loss" +i);
+      rmCreateTrigger("grantTechs"+i);
+   }
+   rmCreateTrigger("gaiaChat");
 
+   // Fire starting units
+   for(i=1; <cNumberPlayers)
+   {
+      rmSwitchToTrigger(rmTriggerID("grantTechs"+i));
+      rmSetTriggerActive(true);
 
-for(i=1; <cNumberPlayers)
-{
-   rmCreateTrigger("StartCountdown" + i);
-   rmCreateTrigger("CountdownWarning"+i);
-   rmCreateTrigger("StopCountdown" +i);
-   rmCreateTrigger("Loss" +i);
-   rmCreateTrigger("grantTechs"+i);
-}
-rmCreateTrigger("gaiaChat");
+      rmAddTriggerCondition("Timer");
+      rmSetTriggerConditionParamInt("Param1", 1);
 
-/*
-// Start Countdown
-for(i=1; <cNumberPlayers)
-{
-   rmSwitchToTrigger(rmTriggerID("StartCountdown"+i));
-   rmSetTriggerActive(true);
+      rmAddTriggerEffect("Set Tech Status");
+      rmSetTriggerEffectParamInt("PlayerID", i);
+      rmSetTriggerEffectParam("TechID", "33");
+      rmSetTriggerEffectParam("Status", "4");
 
-   rmAddTriggerCondition("Player Unit Count");
-   rmSetTriggerConditionParamInt("PlayerID", i);
-   rmSetTriggerConditionParam("ProtoUnit", "Settlement Level 1");
-   rmSetTriggerConditionParam("Op", "<");
-   rmSetTriggerConditionParamInt("Count", 1);
+      rmAddTriggerEffect("Set Tech Status");
+      rmSetTriggerEffectParamInt("PlayerID", i);
+      rmSetTriggerEffectParam("TechID", "60");
+      rmSetTriggerEffectParam("Status", "4");
 
-   rmAddTriggerCondition("Player Unit Count");
-   rmSetTriggerConditionParamInt("PlayerID", i);
-   rmSetTriggerConditionParam("ProtoUnit", "Citadel Center");
-   rmSetTriggerConditionParam("Op", "<");
-   rmSetTriggerConditionParamInt("Count", 1);
+      rmAddTriggerEffect("Set Tech Status");
+      rmSetTriggerEffectParamInt("PlayerID", i);
+      rmSetTriggerEffectParam("TechID", "182");
+      rmSetTriggerEffectParam("Status", "4");
 
-   rmAddTriggerCondition("Player Active");
-   rmSetTriggerConditionParamInt("PlayerID", i);
+      rmAddTriggerEffect("Set Tech Status");
+      rmSetTriggerEffectParamInt("PlayerID", i);
+      rmSetTriggerEffectParam("TechID", "362");
+      rmSetTriggerEffectParam("Status", "4");
 
-   rmAddTriggerEffect("Send Chat");
-   rmSetTriggerEffectParamInt("PlayerID", 0);
-//   rmSetTriggerEffectParam("Message", rmGetPlayerName(i)+" has no Settlements! Countdown begins!");
-   rmSetTriggerEffectParam("Message", "{PlayerNameString("+i+",22608)}");
-
-   rmAddTriggerEffect("Counter:Add Timer");
-   rmSetTriggerEffectParam("Name", "victoryCounter"+i);
-   rmSetTriggerEffectParamInt("Start",120);
-   rmSetTriggerEffectParamInt("Stop",30);
-//   rmSetTriggerEffectParam("Msg", rmGetPlayerName(i)+" needs to claim a Settlement in");
-   rmSetTriggerEffectParam("Msg", "{PlayerIDNameString("+i+",22609)}");
-   rmSetTriggerEffectParamInt("Event", rmTriggerID("CountdownWarning"+i));
-
-   rmAddTriggerEffect("Fire Event");
-   rmSetTriggerEffectParamInt("EventID", rmTriggerID("StopCountdown"+i));
-}
-*/
-
-/*
-// Countdown Warning
-for(i=1; <cNumberPlayers)
-{
-   rmSwitchToTrigger(rmTriggerID("CountdownWarning"+i));
-   rmSetTriggerActive(false);
-
-   rmAddTriggerEffect("Send Chat");
-   rmSetTriggerEffectParamInt("PlayerID", 0);
-//   rmSetTriggerEffectParam("Message", rmGetPlayerName(i)+" will lose in 30 seconds, unless a Settlement is claimed.");
-   rmSetTriggerEffectParam("Message", "{PlayerNameString("+i+",22610)}");
-
-   rmAddTriggerEffect("Counter:Add Timer");
-   rmSetTriggerEffectParam("Name", "victoryCounter2"+i);
-   rmSetTriggerEffectParamInt("Start",30);
-   rmSetTriggerEffectParamInt("Stop",0);
-//   rmSetTriggerEffectParam("Msg", rmGetPlayerName(i)+" needs to claim a Settlement in");
-   rmSetTriggerEffectParam("Msg", "{PlayerIDNameString("+i+",22609)}");
-   rmSetTriggerEffectParamInt("Event", rmTriggerID("Loss"+i));
-}
-*/
-
-/*
-// Stop Countdown
-for(i=1; <cNumberPlayers)
-{
-   rmSwitchToTrigger(rmTriggerID("StopCountdown"+i));
-   rmSetTriggerActive(false);
-
-   rmAddTriggerCondition("Player Unit Count");
-   rmSetTriggerConditionParamInt("PlayerID", i);
-   rmSetTriggerConditionParam("ProtoUnit", "Settlement Level 1");
-   rmSetTriggerConditionParam("Op", ">");
-   rmSetTriggerConditionParamInt("Count", 0);
-
-   rmAddTriggerEffect("Counter Stop");
-   rmSetTriggerEffectParam("Name", "victoryCounter"+i);
-
-   rmAddTriggerEffect("Counter Stop");
-   rmSetTriggerEffectParam("Name", "victoryCounter2"+i);
-
-   rmAddTriggerEffect("Send Chat");
-   rmSetTriggerEffectParamInt("PlayerID", 0);
-//   rmSetTriggerEffectParam("Message", rmGetPlayerName(i)+" has claimed a Settlement!");
-   rmSetTriggerEffectParam("Message", "{PlayerNameString("+i+",22611)}");
-
-   rmAddTriggerEffect("Fire Event");
-   rmSetTriggerEffectParamInt("EventID", rmTriggerID("StartCountdown"+i));
-}
-*/
-
-/*
-// You lose
-for(i=1; <cNumberPlayers)
-{
-   rmSwitchToTrigger(rmTriggerID("Loss"+i));
-   rmSetTriggerActive(false);
-
-   rmAddTriggerEffect("Send Chat");
-   rmSetTriggerEffectParamInt("PlayerID", 0);
-//   rmSetTriggerEffectParam("Message", rmGetPlayerName(i)+" is out of the game.");
-   rmSetTriggerEffectParam("Message", "{PlayerNameString("+i+",22612)}");
-
-   rmAddTriggerEffect("Set Player Defeated");
-   rmSetTriggerEffectParamInt("Player", i);
-}
-*/  
-
-// Fire starting units
-for(i=1; <cNumberPlayers)
-{
-   rmSwitchToTrigger(rmTriggerID("grantTechs"+i));
-   rmSetTriggerActive(true);
-
-   rmAddTriggerCondition("Timer");
-   rmSetTriggerConditionParamInt("Param1", 1);
-
-   rmAddTriggerEffect("Set Tech Status");
-   rmSetTriggerEffectParamInt("PlayerID", i);
-   rmSetTriggerEffectParam("TechID", "33");
-   rmSetTriggerEffectParam("Status", "4");
-
-   rmAddTriggerEffect("Set Tech Status");
-   rmSetTriggerEffectParamInt("PlayerID", i);
-   rmSetTriggerEffectParam("TechID", "60");
-   rmSetTriggerEffectParam("Status", "4");
-
-   rmAddTriggerEffect("Set Tech Status");
-   rmSetTriggerEffectParamInt("PlayerID", i);
-   rmSetTriggerEffectParam("TechID", "182");
-   rmSetTriggerEffectParam("Status", "4");
-
-   rmAddTriggerEffect("Set Tech Status");
-   rmSetTriggerEffectParamInt("PlayerID", i);
-   rmSetTriggerEffectParam("TechID", "362");
-   rmSetTriggerEffectParam("Status", "4");
-
-/*   rmAddTriggerEffect("Set Tech Status");
-   rmSetTriggerEffectParamInt("PlayerID", i);
-   rmSetTriggerEffectParam("TechID", "381");
-   rmSetTriggerEffectParam("Status", "4"); */
-
-} 
+   } 
 
    rmSwitchToTrigger(rmTriggerID("gaiaChat"));
    rmSetTriggerActive(true);
@@ -180,27 +82,23 @@ for(i=1; <cNumberPlayers)
 
    rmAddTriggerEffect("Send Chat");
    rmSetTriggerEffectParamInt("PlayerID", 0);
-//   rmSetTriggerEffectParam("Message", "Masons, Architects, Fortify Town Center active"); 
    rmSetTriggerEffectParam("Message", "{22613}");
 
+   for(i=1; <cNumberPlayers)
+   {
+   	if(rmGetPlayerCulture(i) == cCultureAtlantean)
+   	{
+   	rmCreateTrigger("Favor_trickle"+i);
+   	rmSetTriggerActive(true);
+   	rmSetTriggerPriority(4);
+   	rmSetTriggerLoop(false);
 
-	// Triggera to grant Altantis a favor trickle
-
-for(i=1; <cNumberPlayers)
-{
-	if(rmGetPlayerCulture(i) == cCultureAtlantean)
-	{
-	rmCreateTrigger("Favor_trickle"+i);
-	rmSetTriggerActive(true);
-	rmSetTriggerPriority(4);
-	rmSetTriggerLoop(false);
-
-	rmAddTriggerEffect("Set Tech Status");
-   rmSetTriggerEffectParamInt("PlayerID", i);
-   rmSetTriggerEffectParam("TechID", "496");
-	rmSetTriggerEffectParam("Status", "4");
-	}
-}
+   	rmAddTriggerEffect("Set Tech Status");
+      rmSetTriggerEffectParamInt("PlayerID", i);
+      rmSetTriggerEffectParam("TechID", "496");
+   	rmSetTriggerEffectParam("Status", "4");
+   	}
+   }
 
 
    // Text
@@ -257,7 +155,6 @@ for(i=1; <cNumberPlayers)
    int startingSettlementID=rmCreateObjectDef("starting settlement");
   
    //Settlement type changed from "Citadel Center" to "Settlement Level 1" !
-   //rmAddObjectDefItem(startingSettlementID, "Citadel Center", 1, 0.0);
    rmAddObjectDefItem(startingSettlementID, "Settlement Level 1", 1, 0.0);
 
    rmAddObjectDefToClass(startingSettlementID, rmClassID("starting settlement"));
@@ -306,7 +203,7 @@ for(i=1; <cNumberPlayers)
    rmSetObjectDefMaxDistance(stragglerTreeID, 15.0);
    rmAddObjectDefConstraint(stragglerTreeID, avoidImpassableLand);
 
-      // gold avoids gold, Settlements and TCs
+   // gold avoids gold, Settlements and TCs
    int farGoldID=rmCreateObjectDef("far gold");
    rmAddObjectDefItem(farGoldID, "Gold mine", 1, 0.0);
    rmSetObjectDefMinDistance(farGoldID, 70.0);
@@ -370,59 +267,15 @@ for(i=1; <cNumberPlayers)
    rmAddObjectDefConstraint(relicID, avoidImpassableLand);
 
 
-/*
-   // Create the lakes if teams = 2
-
-   if(cNumberTeams == 2)
-   {
-      int coreThreeID=rmCreateArea("core three");
-      rmSetAreaSize(coreThreeID, 0.1, 0.1);
-      rmSetAreaLocation(coreThreeID, 0, 1);
-      rmSetAreaWaterType(coreThreeID, "Greek River");
-      rmSetAreaBaseHeight(coreThreeID, 0.0);
-      rmSetAreaMinBlobs(coreThreeID, 3);
-      rmSetAreaHeightBlend(coreThreeID, 1);
-      rmSetAreaMaxBlobs(coreThreeID, 3);
-      rmSetAreaMinBlobDistance(coreThreeID, 20.0);
-      rmSetAreaMaxBlobDistance(coreThreeID, 20.0);
-      rmSetAreaCoherence(coreThreeID, 0.25);
-      rmAddAreaInfluenceSegment(coreThreeID, 0, 1, 0.3, 0.7);
-      rmBuildArea(coreThreeID);
-   
-      int coreFourID=rmCreateArea("core four");
-      rmSetAreaSize(coreFourID, 0.1, 0.1);
-      rmSetAreaLocation(coreFourID, 1, 0);
-      rmSetAreaWaterType(coreFourID, "Greek River");
-      rmSetAreaBaseHeight(coreFourID, 0.0);
-      rmSetAreaMinBlobs(coreFourID, 3);
-      rmSetAreaHeightBlend(coreFourID, 1);
-      rmSetAreaMaxBlobs(coreFourID, 3);
-      rmSetAreaMinBlobDistance(coreFourID, 20.0);
-      rmSetAreaMaxBlobDistance(coreFourID, 20.0);
-      rmSetAreaCoherence(coreFourID, 0.25);
-      rmAddAreaInfluenceSegment(coreFourID, 0.7, 0.3, 1, 0);
-      rmBuildArea(coreFourID);
-   }
-*/
    // Text
    rmSetStatusText("",0.20);
-
-/*   rmSetTeamSpacingModifier(0.70); */
 
    if(cNumberNonGaiaPlayers == 2)
       rmPlacePlayersLine(0.15, 0.15, 0.85, 0.85, 0, 0); 
    else if(cNumberTeams == 2)
-/*   {
-      rmSetPlacementTeam(0); 
-      rmPlacePlayersLine(0.06, 0.06, 0.43, 0.43, 0, 0); 
-      rmSetPlacementTeam(1);
-      rmPlacePlayersLine(0.57, 0.57, 0.94, 0.94, 0, 0);
-   } */
-
       rmPlacePlayersLine(0.07, 0.07, 0.93, 0.93, 0, 20); 
    else
       rmPlacePlayersCircular(0.35, 0.4, rmDegreesToRadians(5.0));
-
 
    // Set up player areas.
    float playerFraction=rmAreaTilesToFraction(1600);
@@ -439,7 +292,6 @@ for(i=1; <cNumberPlayers)
       rmSetAreaMinBlobDistance(id, 16.0);
       rmSetAreaMaxBlobDistance(id, 40.0);
       rmSetAreaCoherence(id, 0.0);
-/*      rmAddAreaConstraint(id, playerConstraint); */
       rmSetAreaLocPlayer(id, i);
       rmSetAreaTerrainType(id, "GrassDirt50");
       rmAddAreaTerrainLayer(id, "GrassDirt25", 0, 4);
@@ -505,18 +357,13 @@ for(i=1; <cNumberPlayers)
          rmAddObjectDefItem(startingTowerID, "tower", 1, 0.0);
 
          //original construction type "tent" modified to "house"
-         //rmAddObjectDefItem(startingTowerID, "tent", 1, 5.0);
          rmAddObjectDefItem(startingTowerID, "house", 4, 7.0);
          rmAddObjectDefItem(startingTowerID, "tower", 1, 5.0);
          rmAddObjectDefItem(startingTowerID, "farm", 2, 10.0);
          rmAddObjectDefItem(startingTowerID, "longhouse", 1, 10.0);         
 
-         //min distance reduced from 18.0 to 15.0
-         //rmSetObjectDefMinDistance(startingTowerID, 18.0);
          rmSetObjectDefMinDistance(startingTowerID, 18.0);
 
-         //max distance reducede from 28.0 to 15.0!
-         //rmSetObjectDefMaxDistance(startingTowerID, 28.0);
          rmSetObjectDefMaxDistance(startingTowerID, 28.0);
 
          rmAddObjectDefToClass(startingTowerID, rmClassID("classTower"+i));
@@ -528,7 +375,6 @@ for(i=1; <cNumberPlayers)
 
       }   
    }
-
 
    // Straggler trees.
    rmPlaceObjectDefPerPlayer(stragglerTreeID, false, 10);
@@ -611,7 +457,7 @@ for(i=1; <cNumberPlayers)
    rmPlaceObjectDefAtLoc(fishID, 0, 0.5, 0.5, 3*cNumberNonGaiaPlayers);
 
 
-      // Elev.
+   // Elev.
    int numTries=10*cNumberNonGaiaPlayers;
    failCount=0;
    for(i=0; <numTries)
@@ -655,7 +501,6 @@ for(i=1; <cNumberPlayers)
       int forestID=rmCreateArea("forest"+i);
 
       //forest sizes increased!
-      //rmSetAreaSize(forestID, rmAreaTilesToFraction(100), rmAreaTilesToFraction(300));
       rmSetAreaSize(forestID, rmAreaTilesToFraction(100), rmAreaTilesToFraction(1000));
 
       rmSetAreaWarnFailure(forestID, false);
@@ -723,13 +568,6 @@ for(i=1; <cNumberPlayers)
    rmAddObjectDefConstraint(bushID2, avoidAll);
    rmAddObjectDefConstraint(bushID2, avoidImpassableLand);
    rmPlaceObjectDefAtLoc(bushID2, 0, 0.5, 0.5, 8*cNumberNonGaiaPlayers); 
-
-
-
-
-
-
-
    // Text
    rmSetStatusText("",1.00);
 

@@ -1,13 +1,28 @@
-/*
-*/
-
+/**
+ * @fileSahara Desert.xsS
+ * @author  Anderson Paschoalon <anderson.paschoalon@gmail.com>
+ * @version 1.0
+ * @date 16/01/2020
+ * @section LICENSE
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details at
+ * https://www.gnu.org/copyleft/gpl.html
+ *
+ * @section DESCRIPTION
+ *
+ * My First implementation of this idea of a map. Few resources, especially wood.
+ */
 
 void main(void)
-
 {
-
-/*=========================TRIGGERS=======================*/
-
 	rmCreateTrigger("signature");
 
 	rmSwitchToTrigger(rmTriggerID("signature"));
@@ -15,9 +30,6 @@ void main(void)
 	rmSetTriggerConditionParamInt("Param1",0);
 	rmAddTriggerEffect("Send Chat");
 	rmSetTriggerEffectParamInt("PlayerID",0);
-	//rmSetTriggerEffectParam("Message", "<color=1,0,0>This map has been created by Mr. UNKnowN</color>");
-
-/*=========================TRIGGERS=======================*/
 
    rmSetStatusText("",0.01);
    int playerTiles=25000;
@@ -105,7 +117,6 @@ void main(void)
 
 
    rmAddObjectDefItem(stragglerTreeID, "palm tree", 1, 0.0);
-   //rmAddObjectDefItem(stragglerTreeID, "oak tree", 1, 0.0);
 
    rmSetObjectDefMinDistance(stragglerTreeID, 12.0);
    rmSetObjectDefMaxDistance(stragglerTreeID, 15.0);
@@ -161,28 +172,23 @@ void main(void)
    rmAddObjectDefConstraint(farPredatorID, avoidImpassableLand);
    int farBerriesID=rmCreateObjectDef("far berries");
 
-//   NO EXTRA FOOD
    int classBonusHuntable=rmDefineClass("bonus huntable");
    int avoidBonusHuntable=rmCreateClassDistanceConstraint("avoid bonus huntable", classBonusHuntable, 40.0);
    int avoidHuntable=rmCreateTypeDistanceConstraint("avoid huntable", "huntable", 20.0);
    int bonusHuntableID=rmCreateObjectDef("bonus huntable");
 
    int randomTreeID=rmCreateObjectDef("ramdom tree");
-   //int randomTreeID=rmCreateObjectDef("random tree");
   
    rmAddObjectDefItem(randomTreeID, "Palm forest", 1, 0.0);
-   //rmAddObjectDefItem(randomTreeID, "Savannah Tree", 1, 0.0);
 
    rmSetObjectDefMinDistance(randomTreeID, 0.0);
    rmSetObjectDefMaxDistance(randomTreeID, rmXFractionToMeters(0.5));
 
    rmAddObjectDefConstraint(randomTreeID, rmCreateTypeDistanceConstraint("ramdom tree", "all", 4.0));
-   //rmAddObjectDefConstraint(randomTreeID, rmCreateTypeDistanceConstraint("random tree", "all", 4.0));
 
    rmAddObjectDefConstraint(randomTreeID, shortAvoidSettlement);
    rmAddObjectDefConstraint(randomTreeID, avoidImpassableLand);
 
- // NO BIRDS
    int farhawkID=rmCreateObjectDef("far hawks");
    int relicID=rmCreateObjectDef("relic");
    rmAddObjectDefItem(relicID, "relic", 1, 0.0);
@@ -208,7 +214,6 @@ void main(void)
 
    // Create a forest
    forestOneID=rmCreateArea("forest one");
-   //rmSetAreaSize(forestOneID, 0.15, 0.15);
    rmSetAreaSize(forestOneID, 0.015, 0.015);
    rmSetAreaLocation(forestOneID, 0.5, 0.5);
    rmSetAreaForestType(forestOneID, "palm forest");
@@ -223,7 +228,6 @@ void main(void)
    // Create the core lake
    coreOneID=rmCreateArea("core one");
    rmSetAreaSize(coreOneID, 0.01, 0.01);
-   //rmSetAreaSize(coreOneID, 0.06, 0.06);
    rmSetAreaLocation(coreOneID, 0.5, 0.5);
    rmSetAreaWaterType(coreOneID, "Egyptian Nile");
    rmAddAreaToClass(coreOneID, rmClassID("center"));
@@ -234,24 +238,6 @@ void main(void)
    rmSetAreaCoherence(coreOneID, 0.25);
    rmBuildArea(coreOneID);
 
-
-   /*   
-   int centerID=rmCreateArea("center");
-   rmSetAreaSize(centerID, 0.05, 0.05);
-   rmSetAreaLocation(centerID, 0.5, 0.5);
-   rmSetAreaWaterType(centerID, "Egyptian Nile");
-   rmAddAreaToClass(centerID, rmClassID("center"));
-   rmSetAreaBaseHeight(centerID, 0.0);
-   rmSetAreaMinBlobs(centerID, 8);
-   rmSetAreaMaxBlobs(centerID, 10);
-   rmSetAreaMinBlobDistance(centerID, 10);
-   rmSetAreaMaxBlobDistance(centerID, 20);
-   rmSetAreaSmoothDistance(centerID, 50);
-   rmSetAreaCoherence(centerID, 0.25);
-   rmBuildArea(centerID); 
-   */
-
-   // NO MONKEYS!!
    float monkeyChance=rmRandFloat(0, 1);
    if(cNumberPlayers > 3)
    {
@@ -329,7 +315,6 @@ void main(void)
       rmSetAreaCoherence(id4, 0.0);
       rmBuildArea(id4);
 
-//  NO FLOWERS!
       flowerID=rmCreateObjectDef("grass"+i);
    }
    rmPlaceObjectDefPerPlayer(playerFishID, false);
@@ -349,14 +334,12 @@ void main(void)
    rmPlaceObjectDefAtLoc(fishID, 0, 0.5, 0.5, 1*cNumberNonGaiaPlayers);
    rmSetStatusText("",0.40);
  
-// THERE ARE NO SHARKS OR OTHER WATER CREATURES (except fish)
    int sharkLand = rmCreateTerrainDistanceConstraint("shark land", "land", true, 20.0);
    int sharkVssharkID=rmCreateTypeDistanceConstraint("shark v shark", "shark", 20.0);
    int sharkVssharkID2=rmCreateTypeDistanceConstraint("shark v orca", "orca", 20.0);
    int sharkVssharkID3=rmCreateTypeDistanceConstraint("shark v whale", "whale", 20.0);
    rmSetStatusText("",0.42);
 
-//  NO SHARKS!!
    int sharkID=rmCreateObjectDef("shark");
 
    rmPlaceObjectDefPerPlayer(startingSettlementID, true);
@@ -449,9 +432,6 @@ void main(void)
    rmPlaceObjectDefPerPlayer(farPredatorID, false, 1);
    rmPlaceObjectDefAtLoc(randomTreeID, 0, 0.5, 0.5, 10*cNumberNonGaiaPlayers);
 
-   //Commented to New Sahara Desert
-   //int classForest=rmDefineClass("forest");
-
    int forestObjConstraint=rmCreateTypeDistanceConstraint("forest obj", "all", 6.0);
    int forestConstraint=rmCreateClassDistanceConstraint("forest v forest", rmClassID("forest"), 20.0);
    int forestSettleConstraint=rmCreateClassDistanceConstraint("forest settle", rmClassID("starting settlement"), 20.0);
@@ -463,7 +443,6 @@ void main(void)
       rmSetAreaSize(forestID, rmAreaTilesToFraction(05), rmAreaTilesToFraction(50));
       rmSetAreaWarnFailure(forestID, false);
       if(rmRandFloat(0.0, 1.0)<0.5)
-         //rmSetAreaForestType(forestID, "Savannah forest");
          rmSetAreaForestType(forestID, "Palm forest");
       else
          rmSetAreaForestType(forestID, "Palm forest");
@@ -548,8 +527,6 @@ void main(void)
    rmPlaceObjectDefAtLoc(kelp2ID, 0, 0.5, 0.5, 6*cNumberNonGaiaPlayers);
 
    rmSetStatusText("",1.0);
-
-
 
 }  
 

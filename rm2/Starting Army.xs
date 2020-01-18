@@ -1,4 +1,27 @@
-// Main entry point for random map script
+/**
+ * @file
+ * @author  Anderson Paschoalon <anderson.paschoalon@gmail.com>
+ * @version 1.0
+ * @date 16/01/2020
+ * @section LICENSE
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details at
+ * https://www.gnu.org/copyleft/gpl.html
+ *
+ * @section DESCRIPTION
+ *
+ * Each player starts with a huge army.
+ * @TODO
+ * - Chinese expansion support
+ */
 void main(void)
 
 {
@@ -16,10 +39,6 @@ void main(void)
    int size=2.0*sqrt(cNumberNonGaiaPlayers*playerTiles/0.9);
    rmEchoInfo("Map size="+size+"m x "+size+"m");
    rmSetMapSize(size, size);
-
-   // Set up default water.
-/*   rmSetSeaLevel(6.0); */
-/*   rmSetSeaType("Egyptian Nile"); */
 
    // Init map.
    rmTerrainInitialize("SavannahA");
@@ -68,7 +87,6 @@ void main(void)
 
   
    // -------------Define objects
- // -------------Define objects
    // Close Objects
 
    int startingSettlementID=rmCreateObjectDef("Starting settlement");
@@ -333,22 +351,6 @@ void main(void)
    // Build the areas.
    rmBuildAllAreas();
 
-/*   for(i=1; <cNumberPlayers*100)
-   {
-      // Beautification sub area.
-      int id2=rmCreateArea("dirt patch"+i, rmAreaID("player"+i));
-      rmSetAreaSize(id2, rmAreaTilesToFraction(20), rmAreaTilesToFraction(40));
-      rmSetAreaLocPlayer(id2, i);
-      rmSetAreaTerrainType(id2, "GreekRoadA");
-      rmSetAreaMinBlobs(id2, 1);
-      rmSetAreaMaxBlobs(id2, 5);
-      rmSetAreaWarnFailure(id2, false);
-      rmSetAreaMinBlobDistance(id2, 16.0);
-      rmSetAreaMaxBlobDistance(id2, 40.0);
-      rmSetAreaCoherence(id2, 0.0);
-      rmBuildArea(id2);
-   } */
-
    for(i=1; <cNumberPlayers*30)
    {
       // Beautification sub area.
@@ -378,10 +380,8 @@ void main(void)
       int smallPondID=rmCreateArea("small pond"+i);
       rmSetAreaSize(smallPondID, rmAreaTilesToFraction(600), rmAreaTilesToFraction(600));
       rmSetAreaWaterType(smallPondID, "savannah water hole");
-/*      rmSetAreaBaseHeight(smallPondID, 0.0); */
       rmSetAreaMinBlobs(smallPondID, 1);
       rmSetAreaMaxBlobs(smallPondID, 1);
-   /*      rmSetAreaSmoothDistance(smallPondID, 50); */
       rmAddAreaToClass(smallPondID, pondClass);
       rmAddAreaConstraint(smallPondID, pondConstraint);
       rmAddAreaConstraint(smallPondID, edgeConstraint);
@@ -390,10 +390,10 @@ void main(void)
       rmBuildArea(smallPondID);
    }
 
-      // Place starting settlements.
+   // Place starting settlements.
    // Close things....
    // TC
-rmPlaceObjectDefPerPlayer(startingSettlementID, true);
+   rmPlaceObjectDefPerPlayer(startingSettlementID, true);
 
    id=rmAddFairLoc("Settlement A", false, false,  60, 80, 40, 15); /* bool forward bool inside */
    if(cNumberNonGaiaPlayers > 8)
@@ -413,10 +413,8 @@ rmPlaceObjectDefPerPlayer(startingSettlementID, true);
       }
    }
 
-
   for(i=0; <(rmRandInt(1,2)))
       rmPlaceObjectDefAtLoc(randSettleID, 0, 0.5, 0.5);
-
 
    // Elev.
    int numTries=5*cNumberNonGaiaPlayers;
@@ -453,7 +451,7 @@ rmPlaceObjectDefPerPlayer(startingSettlementID, true);
    }
 
   
-  // Text
+   // Text
    rmSetStatusText("",0.40);
 
    // Straggler trees.
@@ -515,32 +513,26 @@ rmPlaceObjectDefPerPlayer(startingSettlementID, true);
 
    int allObjConstraint=rmCreateTypeDistanceConstraint("all obj", "all", 6.0);
 
-  // Text
+   // Text
    rmSetStatusText("",0.60);
 
    // Forest.
    int classForest=rmDefineClass("forest");
    int forestConstraint=rmCreateClassDistanceConstraint("forest v forest", rmClassID("forest"), 35.0);
-   //int forestSettleConstraint=rmCreateClassDistanceConstraint("forest settle", rmClassID("starting settlement"), 20.0);
    int forestSettleConstraint=rmCreateClassDistanceConstraint("forest settle", rmClassID("starting settlement"), 40.0);
    failCount=0;
-   //int numTries=30*cNumberNonGaiaPlayers;
-   //int maxCount=20*cNumberNonGaiaPlayers;
    numTries=15*cNumberNonGaiaPlayers;
    for(i=0; <numTries)
    {
       int forestID=rmCreateArea("forest"+i);
       rmSetAreaSize(forestID, rmAreaTilesToFraction(100), rmAreaTilesToFraction(150));
-      //rmSetAreaLocation(forestID, rmRandFloat(0.0, 1.0), rmRandFloat(0.0, 1.0));
       rmSetAreaWarnFailure(forestID, false);
       rmSetAreaForestType(forestID, "mixed palm forest");
       rmAddAreaConstraint(forestID, forestSettleConstraint);
       rmAddAreaConstraint(forestID, allObjConstraint);
       rmAddAreaConstraint(forestID, forestConstraint);
       rmAddAreaConstraint(forestID, avoidImpassableLand);
-   // rmAddAreaConstraint(forestID, avoidPond);
       rmAddAreaToClass(forestID, classForest);
-      
       rmSetAreaMinBlobs(forestID, 3);
       rmSetAreaMaxBlobs(forestID, 7);
       rmSetAreaMinBlobDistance(forestID, 16.0);
@@ -571,7 +563,7 @@ rmPlaceObjectDefPerPlayer(startingSettlementID, true);
    rmAddObjectDefConstraint(bushID, shortAvoidImpassableLand);
    rmPlaceObjectDefAtLoc(bushID, 0, 0.5, 0.5, 10*cNumberNonGaiaPlayers);
 
-  // Text
+   // Text
    rmSetStatusText("",0.80);
 
    for(i=0; <numPond)

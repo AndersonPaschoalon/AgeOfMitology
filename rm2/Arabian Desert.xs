@@ -1,9 +1,34 @@
-// Saara Deset
+/**
+ * @file
+ * @author  Anderson Paschoalon <anderson.paschoalon@gmail.com>
+ * @version 1.0
+ * @date 16/01/2020
+ * @section LICENSE
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details at
+ * https://www.gnu.org/copyleft/gpl.html
+ *
+ * @section DESCRIPTION
+ *
+ * A gigantic map with gold and abundant relics, but randomly scattered 
+ * across the map. However, bandit camps are also randomly scattered. 
+ * Very little wood available, mostly concentrated in Oasis Central, 
+ * which may own some fish.
+ * @TODO
+ * - put some paphyrus on the central lake
+ */
 
-// Main entry point for random map script
 void main(void)
 {
-  // Text
+   // Text
    rmSetStatusText("Creating map...",0.01);
    // Set size.
    float xLoc = 0.0;
@@ -41,10 +66,10 @@ void main(void)
 
    rmSetStatusText("Defining constraints...",0.10);
    // -------------Define constraints
-   
+
    // Create a edge of map constraint.
    int edgeConstraint=rmCreateBoxConstraint("edge of map", rmXTilesToFraction(8), rmZTilesToFraction(8), 1.0-rmXTilesToFraction(8), 1.0-rmZTilesToFraction(8));
-   
+
    // Center constraint.
    int centerConstraint=rmCreateClassDistanceConstraint("stay away from center", rmClassID("center"), 8.0);
    int playerCenterConstraint=rmCreateClassDistanceConstraint("player areas from center", rmClassID("center"), 12.0);
@@ -92,14 +117,14 @@ void main(void)
    rmSetObjectDefMaxDistance(startingTowerID, 20.0);
    rmAddObjectDefConstraint(startingTowerID, avoidTower);
    rmAddObjectDefConstraint(startingTowerID, centerConstraint);
-   
+
    // goats
    int closeGoatsID=rmCreateObjectDef("close goats");
    rmAddObjectDefItem(closeGoatsID, "goat", 2, 2.0);
    rmSetObjectDefMinDistance(closeGoatsID, 25.0);
    rmSetObjectDefMaxDistance(closeGoatsID, 30.0);
    rmAddObjectDefConstraint(closeGoatsID, avoidFood);
-   
+
    int closeChickensID=rmCreateObjectDef("close Chickens");
    if(rmRandFloat(0,1)<0.5)
       rmAddObjectDefItem(closeChickensID, "chicken", rmRandInt(5,8), 5.0);
@@ -133,7 +158,7 @@ void main(void)
    rmSetObjectDefMinDistance(farGoatsID, 80.0);
    rmSetObjectDefMaxDistance(farGoatsID, 150.0);
    rmAddObjectDefConstraint(farGoatsID, avoidHerdable);
-   
+
    // pick lions or bears as predators
    // avoid TCs
    int farPredatorID=rmCreateObjectDef("far predator");
@@ -141,7 +166,7 @@ void main(void)
    rmSetObjectDefMinDistance(farPredatorID, 80.0);
    rmSetObjectDefMaxDistance(farPredatorID, 80.0);
    rmAddObjectDefConstraint(farPredatorID, farStartingSettleConstraint);
-   
+
    int farPredator2ID=rmCreateObjectDef("far predator2");
    rmAddObjectDefItem(farPredator2ID, "hyena", 3, 8.0);
    rmSetObjectDefMinDistance(farPredator2ID, 80.0);
@@ -154,7 +179,7 @@ void main(void)
    rmSetObjectDefMinDistance(farBerriesID, 0.0);
    rmSetObjectDefMaxDistance(farBerriesID, rmXFractionToMeters(0.5));
    rmAddObjectDefConstraint(farBerriesID, shortAvoidGold);
-   
+
    // This map will either use boar or deer as the extra huntable food.
    int classBonusHuntable=rmDefineClass("bonus huntable");
    int avoidBonusHuntable=rmCreateClassDistanceConstraint("avoid bonus huntable", classBonusHuntable, 40.0);
@@ -202,7 +227,7 @@ void main(void)
 
    rmPlacePlayersSquare(0.4, 0.05, 0.05);
 
-  // Text
+   // Text
    rmSetStatusText("",0.20);
 
    // Dumb thing to just block out player areas since placement sucks right now.
@@ -390,7 +415,7 @@ void main(void)
 
    // Straggler trees.
    rmPlaceObjectDefPerPlayer(stragglerTreeID, false, 3);
-   
+
    // Gold
    //rmPlaceObjectDefPerPlayer(startingGoldID, false, 2);
 
@@ -459,7 +484,7 @@ void main(void)
 
     // Hawks
    rmPlaceObjectDefPerPlayer(farhawkID, false, 2);
-   
+
    // Goats
    for(i=1; <cNumberPlayers)
       rmPlaceObjectDefAtLoc(farGoatsID, 0, rmPlayerLocXFraction(i), rmPlayerLocZFraction(i), 3);
@@ -567,8 +592,8 @@ void main(void)
    rmAddObjectDefConstraint(fishID, fishVsFishID);
    rmAddObjectDefConstraint(fishID, fishLand);
    rmPlaceObjectDefAtLoc(fishID, 0, 0.5, 0.5, cNumberNonGaiaPlayers); 
-   //papyrus
-  /*
+   //papyrus - posso tentar colocar papiro no lado central depois.
+   /*
    int avoidAll=rmCreateTypeDistanceConstraint("avoid all", "all", 6.0);
    int papyrusID=rmCreateObjectDef("lone papyrus");
    int nearshore=rmCreateTerrainMaxDistanceConstraint("papyrus near shore", "land", true, 4.0);
@@ -579,10 +604,10 @@ void main(void)
    rmAddObjectDefConstraint(papyrusID, nearshore);
    rmPlaceObjectDefAtLoc(papyrusID, 0, 0.5, 0.5, cNumberNonGaiaPlayers);
    */
-  // Text
+   // Text
 
    // Bandit Camps
-  rmSetStatusText("Placing bandit camps...",0.90);
+   rmSetStatusText("Placing bandit camps...",0.90);
    int banditCampId=rmCreateObjectDef("Bandit Camp");
    rmAddObjectDefItem(banditCampId, "Longhouse", 1, 0.0);
    int banditId=rmCreateObjectDef("far bandits");
